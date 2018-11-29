@@ -1,5 +1,7 @@
 # Design Automation for Inventor sample
 
+Branch taken for AppBundle publish
+
 ![Platforms](https://img.shields.io/badge/platform-Windows-lightgrey.svg)
 ![.NET](https://img.shields.io/badge/.net-4.7-blue.svg)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](http://opensource.org/licenses/MIT)

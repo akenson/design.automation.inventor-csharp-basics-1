@@ -513,112 +513,112 @@ namespace Autodesk.Inventor.IO.Sample
                 else
                     return;
 
-                // Create Forge DM object for making REST calls to the Forge Data Management APIs
-                s_ForgeDmClient = new ForgeDmClient(s_Config.ForgeDMBaseUrl, s_Creds.ConsumerKey, s_Creds.ConsumerSecret);
+                //// Create Forge DM object for making REST calls to the Forge Data Management APIs
+                //s_ForgeDmClient = new ForgeDmClient(s_Config.ForgeDMBaseUrl, s_Creds.ConsumerKey, s_Creds.ConsumerSecret);
 
-                // Create the input bucket for input files if necessary
-                if (!await EnsureBucketExists(getInputBucketKey()))
-                {
-                    return;
-                }
+                //// Create the input bucket for input files if necessary
+                //if (!await EnsureBucketExists(getInputBucketKey()))
+                //{
+                //    return;
+                //}
 
-                // Upload part input if necessary
-                if (!await EnsureInputExists(s_Config.InputPartFile))
-                {
-                    return;
-                }
+                //// Upload part input if necessary
+                //if (!await EnsureInputExists(s_Config.InputPartFile))
+                //{
+                //    return;
+                //}
 
-                // Upload assembly input if necessary
-                if (!await EnsureInputExists(s_Config.InputAssemblyZipFile))
-                {
-                    return;
-                }
+                //// Upload assembly input if necessary
+                //if (!await EnsureInputExists(s_Config.InputAssemblyZipFile))
+                //{
+                //    return;
+                //}
 
-                // Create the output bucket for result files if necessary
-                if (!await EnsureBucketExists(getOutputBucketKey()))
-                {
-                    return;
-                }
+                //// Create the output bucket for result files if necessary
+                //if (!await EnsureBucketExists(getOutputBucketKey()))
+                //{
+                //    return;
+                //}
 
                 if (!await CreateApp())
                 {
                     return;
                 }
 
-                // Setup a part & assembly activity to show how to interact with an Inventor Part file and assembly zip file
-                if (!await CreatePartAssemblyActivity())
-                {
-                    return;
-                }
+                //// Setup a part & assembly activity to show how to interact with an Inventor Part file and assembly zip file
+                //if (!await CreatePartAssemblyActivity())
+                //{
+                //    return;
+                //}
 
-                // Create a part activity work item
-                string workItemId = await CreatePartWorkItem();
-                if (workItemId == null)
-                {
-                    return;
-                }
+                //// Create a part activity work item
+                //string workItemId = await CreatePartWorkItem();
+                //if (workItemId == null)
+                //{
+                //    return;
+                //}
 
-                // Wait for the result of the work item
-                string status;
-                do
-                {
-                    Console.WriteLine("Sleeping for 2 sec...");
-                    Thread.Sleep(2000);
-                    response = await s_ForgeDaClient.GetWorkItem(workItemId);
-                    if (response.ReportIfError("Exception getting work item status."))
-                        return;
-                    status = response.GetResponseContentProperty("status");
-                    Console.WriteLine($"Work item status: {status}");
-                }
-                while (status == "pending" || status == "inprogress");
+                //// Wait for the result of the work item
+                //string status;
+                //do
+                //{
+                //    Console.WriteLine("Sleeping for 2 sec...");
+                //    Thread.Sleep(2000);
+                //    response = await s_ForgeDaClient.GetWorkItem(workItemId);
+                //    if (response.ReportIfError("Exception getting work item status."))
+                //        return;
+                //    status = response.GetResponseContentProperty("status");
+                //    Console.WriteLine($"Work item status: {status}");
+                //}
+                //while (status == "pending" || status == "inprogress");
 
-                string reportUrl = response.GetResponseContentProperty("reportUrl");
-                if (status != "success")
-                {
-                    Console.WriteLine("Work item failed. Writing report log to: " + s_Config.ErrorReport);
-                    DownloadToDocs(reportUrl, s_Config.ErrorReport);
-                    return;
-                }
+                //string reportUrl = response.GetResponseContentProperty("reportUrl");
+                //if (status != "success")
+                //{
+                //    Console.WriteLine("Work item failed. Writing report log to: " + s_Config.ErrorReport);
+                //    DownloadToDocs(reportUrl, s_Config.ErrorReport);
+                //    return;
+                //}
 
-                Console.WriteLine("Writing report log to: " + s_Config.partReport);
-                DownloadToDocs(reportUrl, s_Config.partReport);
-                response = await s_ForgeDmClient.CreateSignedUrl(getOutputBucketKey(), s_Config.OutputPartFile);
-                string outputDownloadUrl = response.GetResponseContentProperty("signedUrl");
-                DownloadToDocs(outputDownloadUrl, s_Config.OutputPartFile);
+                //Console.WriteLine("Writing report log to: " + s_Config.partReport);
+                //DownloadToDocs(reportUrl, s_Config.partReport);
+                //response = await s_ForgeDmClient.CreateSignedUrl(getOutputBucketKey(), s_Config.OutputPartFile);
+                //string outputDownloadUrl = response.GetResponseContentProperty("signedUrl");
+                //DownloadToDocs(outputDownloadUrl, s_Config.OutputPartFile);
 
-                // Create an assembly activity work item
-                workItemId = await CreateAssemblyWorkItem();
-                if (workItemId == null)
-                {
-                    return;
-                }
+                //// Create an assembly activity work item
+                //workItemId = await CreateAssemblyWorkItem();
+                //if (workItemId == null)
+                //{
+                //    return;
+                //}
 
-                // Wait for the result of the work item
-                do
-                {
-                    Console.WriteLine("Sleeping for 2 sec...");
-                    Thread.Sleep(2000);
-                    response = await s_ForgeDaClient.GetWorkItem(workItemId);
-                    if (response.ReportIfError("Exception getting work item status."))
-                        return;
-                    status = response.GetResponseContentProperty("status");
-                    Console.WriteLine($"Work item status: {status}");
-                }
-                while (status == "pending" || status == "inprogress");
+                //// Wait for the result of the work item
+                //do
+                //{
+                //    Console.WriteLine("Sleeping for 2 sec...");
+                //    Thread.Sleep(2000);
+                //    response = await s_ForgeDaClient.GetWorkItem(workItemId);
+                //    if (response.ReportIfError("Exception getting work item status."))
+                //        return;
+                //    status = response.GetResponseContentProperty("status");
+                //    Console.WriteLine($"Work item status: {status}");
+                //}
+                //while (status == "pending" || status == "inprogress");
 
-                reportUrl = response.GetResponseContentProperty("reportUrl");
-                if (status != "success")
-                {
-                    Console.WriteLine("Work item failed. Writing report log to: " + s_Config.ErrorReport);
-                    DownloadToDocs(reportUrl, s_Config.ErrorReport);
-                    return;
-                }
+                //reportUrl = response.GetResponseContentProperty("reportUrl");
+                //if (status != "success")
+                //{
+                //    Console.WriteLine("Work item failed. Writing report log to: " + s_Config.ErrorReport);
+                //    DownloadToDocs(reportUrl, s_Config.ErrorReport);
+                //    return;
+                //}
 
-                Console.WriteLine("Writing report log to: " + s_Config.assemblyReport);
-                DownloadToDocs(reportUrl, s_Config.assemblyReport);
-                response = await s_ForgeDmClient.CreateSignedUrl(getOutputBucketKey(), s_Config.OutputZipAssemblyFile);
-                outputDownloadUrl = response.GetResponseContentProperty("signedUrl");
-                DownloadToDocs(outputDownloadUrl, s_Config.OutputZipAssemblyFile);
+                //Console.WriteLine("Writing report log to: " + s_Config.assemblyReport);
+                //DownloadToDocs(reportUrl, s_Config.assemblyReport);
+                //response = await s_ForgeDmClient.CreateSignedUrl(getOutputBucketKey(), s_Config.OutputZipAssemblyFile);
+                //outputDownloadUrl = response.GetResponseContentProperty("signedUrl");
+                //DownloadToDocs(outputDownloadUrl, s_Config.OutputZipAssemblyFile);
             }
             catch (Exception e)
             {
